@@ -1,46 +1,33 @@
 var express = require("express");
 var alexa = require("alexa-app");
+var hospitalRoom = require("./alexa-apps/hospital-room");
+var patientMeals = require("./alexa-apps/patient-meals");
 
+// use the environment var from Heroku if set
 var PORT = process.env.PORT || 8080;
-var app = express();
+var IS_DEBUG = true;
 
-// ALWAYS setup the alexa app and attach it to express before anything else.
-var alexaApp = new alexa.app("interface");
+var expressApp = express();
 
-alexaApp.express({
-  expressApp: app,
-  //router: express.Router(),
+expressApp.set("view engine", "ejs");
 
-  // verifies requests come from amazon alexa. Must be enabled for production.
-  // You can disable this if you're running a dev environment and want to POST
-  // things to test behavior. enabled by default.
-  checkCert: false,
-
-  // sets up a GET route when set to true. This is handy for testing in
-  // development, but not recommended for production. disabled by default
-  debug: true
-});
-
-// now POST calls to /test in express will be handled by the app.request() function
+// load the alexa apps
+var hospitalRoomApp = hospitalRoom(expressApp, alexa, IS_DEBUG);
+var patientMealsApp = patientMeals(expressApp, alexa, IS_DEBUG);
 
 // from here on you can setup any other express routes or middlewares as normal
-app.set("view engine", "ejs");
 
-alexaApp.launch(function(request, response) {
-  response.say("You launched the app!");
+// set up a default mapping so I don't have to know any of the names of the apps
+var apps = [];
+for (var key in alexa.apps) {
+  apps.push("\nhttp://localhost:" + PORT + "/" + key);
+}
+
+expressApp.get("/", function (req, res) {
+  res.render("list", {
+    "apps": apps,
+  });
 });
 
-alexaApp.dictionary = { "names": ["matt", "joe", "bob", "bill", "mary", "jane", "dawn"] };
-
-alexaApp.intent("nameIntent", {
-    "slots": { "NAME": "LITERAL" },
-    "utterances": [
-      "my {name is|name's} {names|NAME}", "set my name to {names|NAME}"
-    ]
-  },
-  function(request, response) {
-    response.say("Success!");
-  }
-);
-
-app.listen(PORT, () => console.log("Listening on port " + PORT + "."));
+var appsToTest = apps.join("\n");
+expressApp.listen(PORT, () => console.log("Listening on port " + PORT + ", try:\n" + appsToTest));
