@@ -1,9 +1,9 @@
 {
-  "name": "alexa-app example",
-  "description": "A simple alexa-app example for Heroku.",
+  "name": "alexa-hospital-room",
+  "description": "A example app to integrate with Alexa and Salesforce, powered by Heroku.",
   "repository": "https://github.com/alexa-js/alexa-app-example",
   "logo": "https://avatars0.githubusercontent.com/u/25057028",
-  "keywords": ["alexa", "amazon", "echo", "skills"],
+  "keywords": ["alexa", "amazon", "echo", "skills", "heroku", "salesforce"],
   "buildpacks": [
     {
       "url": "heroku/nodejs"

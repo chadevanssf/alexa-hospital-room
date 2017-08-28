@@ -1,5 +1,31 @@
 var statuses = require("../custom-slot-types/status_type");
 
+var SESSION_FLOOR = "FLOOR";
+
+function setFloor(request, floor) {
+  if (request.hasSession()) {
+    var session = request.getSession();
+
+    if (floor) {
+      session.set(SESSION_FLOOR, floor);
+    }
+  }
+}
+
+function getFloor(request, defaultFloor) {
+  var floor = defaultFloor;
+  if (request.hasSession()) {
+    var session = request.getSession();
+
+    if (floor) {
+      setFloor(request, defaultFloor);
+    } else {
+      floor = session.get(SESSION_FLOOR);
+    }
+  }
+  return floor;
+}
+
 module.exports = function(expressApp, alexa, isDebug) {
 
   // ALWAYS setup the alexa app and attach it to express before anything else.
@@ -27,20 +53,48 @@ module.exports = function(expressApp, alexa, isDebug) {
 
   app.dictionary = statuses;
 
+  app.intent("floorIntent", {
+    "slots": {
+        "floor": "AMAZON.NUMBER"
+      },
+    "utterances": [
+        "{I am|I'm} on floor {-|floor}",
+        "{I am|I'm} on the {-|floor} {floor|}"
+      ]
+    },
+    function(request, response) {
+      var fl = request.slot("floor"); // returns undefined when not found
+
+      setFloor(request, fl);
+
+      response.say("Now set to floor " + fl);
+    }
+  );
+
   app.intent("updateRoomIntent", {
       "slots": {
         "room": "AMAZON.NUMBER",
         "floor": "AMAZON.NUMBER",
-        "status": "STATUS_TYPE" },
+        "status": "STATUS_TYPE"
+      },
       "utterances": [
-        "{mark|update|make} room {-|room} on floor {-|floor} {|as|to} {-|status}"
+        "{mark|update|make} {room|} {-|room} on floor {-|floor} {|as|to} {statuses|status}",
+        "{mark|update|make} {room|} {-|room} on the {-|floor} {floor|} {|as|to} {statuses|status}"
       ]
     },
     function(request, response) {
-      var rm = request.slot("room");
-      var fl = request.slot("floor");
-      var st = request.slot("status");
-      console.log("info: " + rm + ", " + fl + ", " + st);
+      var rm = request.slot("room"); // returns undefined when not found
+      var fl = request.slot("floor"); // returns undefined when not found
+      var st = request.slot("status"); // returns undefined when not found
+      //console.log("info: " + rm + ", " + fl + ", " + st);
+
+      // check to see if we either have the floor or have set the floor previously
+      getFloor(request, fl);
+
+      // determine if we should do a follow on to ask for the floor
+
+      // todo: search the database to see the current status and to update it
+
       response.say("Room " + rm + " on floor " + fl + " was updated successfully to " + st);
     }
   );
