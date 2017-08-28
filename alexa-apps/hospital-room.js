@@ -33,11 +33,14 @@ module.exports = function(expressApp, alexa, isDebug) {
         "FLOOR": "AMAZON.NUMBER",
         "STATUS": "STATUS_TYPE" },
       "utterances": [
-        "{mark|update|make} room {ROOM} on floor {FLOOR} {as|to} {STATUS}"
+        "{mark|update|make} room {ROOM} on floor {FLOOR} {|as|to} {STATUS}"
       ]
     },
     function(request, response) {
-      response.say("Success!");
+      var rm = request.slot('ROOM');
+      var fl = request.slot('FLOOR');
+      var st = request.slot('STATUS');
+      response.say("Room " + rm + " on floor " + fl + " was updated successfully to " + st);
     }
   );
 
