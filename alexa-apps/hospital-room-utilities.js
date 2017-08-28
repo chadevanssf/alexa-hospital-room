@@ -10,7 +10,7 @@ module.exports = {
         session.set(SESSION_FLOOR, floor);
       }
     }
-  }
+  },
 
   getAndSetFloor: function(request, defaultFloor) {
     var floor = defaultFloor;
