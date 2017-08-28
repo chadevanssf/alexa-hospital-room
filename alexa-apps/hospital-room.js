@@ -78,8 +78,8 @@ module.exports = function(expressApp, alexa, isDebug) {
         "status": "STATUS_TYPE"
       },
       "utterances": [
-        "{mark|update|make} {room|} {-|room} on floor {-|floor} {|as|to} {statuses|status}",
-        "{mark|update|make} {room|} {-|room} on the {-|floor} {floor|} {|as|to} {statuses|status}"
+        "{mark|update|make} {room|} {-|room} on floor {-|floor} {|as|to} {-|status}",
+        "{mark|update|make} {room|} {-|room} on the {-|floor} {floor|} {|as|to} {-|status}"
       ]
     },
     function(request, response) {
