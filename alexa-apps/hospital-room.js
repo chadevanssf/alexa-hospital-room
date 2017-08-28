@@ -61,7 +61,7 @@ module.exports = function(expressApp, alexa, isDebug) {
       var rm = request.slot("room"); // returns undefined when not found
       var fl = request.slot("floor"); // returns undefined when not found
       var st = request.slot("status"); // returns undefined when not found
-      //console.log("info: " + rm + ", " + fl + ", " + st);
+      console.log("info: " + rm + ", " + fl + ", " + st);
 
       // check to see if we either have the floor or have set the floor previously
       roomUtilities.getAndSetFloor(request, fl);
