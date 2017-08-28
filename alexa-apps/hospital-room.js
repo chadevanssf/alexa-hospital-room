@@ -36,7 +36,7 @@ module.exports = function(expressApp, alexa, isDebug) {
 
   app.intent("floorIntent", {
     "slots": {
-        FLOOR_NAME: "AMAZON.NUMBER"
+        "floor": "AMAZON.NUMBER"
       },
     "utterances": [
         "{I am|I'm} on floor {-|" + FLOOR_NAME + "}",
@@ -56,9 +56,9 @@ module.exports = function(expressApp, alexa, isDebug) {
 
   app.intent("updateRoomIntent", {
       "slots": {
-        ROOM_NAME: "AMAZON.NUMBER",
-        FLOOR_NAME: "AMAZON.NUMBER",
-        STATUS_NAME: "STATUS_TYPE"
+        "room": "AMAZON.NUMBER",
+        "floor": "AMAZON.NUMBER",
+        "status": "STATUS_TYPE"
       },
       "utterances": [
         "{mark|update|make} {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {as|to|} {-|" + STATUS_NAME + "}",
