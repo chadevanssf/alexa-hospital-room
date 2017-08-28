@@ -1,5 +1,11 @@
+var pg = require("pg");
+
 var statuses = require("../custom-slot-types/status_type");
 var roomUtilities = require("./hospital-room-utilities");
+
+var ROOM_NAME = "room";
+var FLOOR_NAME = "floor";
+var STATUS_NAME = "status";
 
 module.exports = function(expressApp, alexa, isDebug) {
 
@@ -30,15 +36,17 @@ module.exports = function(expressApp, alexa, isDebug) {
 
   app.intent("floorIntent", {
     "slots": {
-        "floor": "AMAZON.NUMBER"
+        FLOOR_NAME: "AMAZON.NUMBER"
       },
     "utterances": [
-        "{I am|I'm} on floor {-|floor}",
-        "{I am|I'm} on the {-|floor} {floor|}"
+        "{I am|I'm} on floor {-|" + FLOOR_NAME + "}",
+        "{I am|I'm} on the {-|" + FLOOR_NAME + "} {floor|}",
+        "on the {-|" + FLOOR_NAME + "} {floor|}"
       ]
     },
     function(request, response) {
       var fl = request.slot("floor"); // returns undefined when not found
+      console.log("info: " + fl);
 
       roomUtilities.setFloor(request, fl);
 
@@ -48,19 +56,19 @@ module.exports = function(expressApp, alexa, isDebug) {
 
   app.intent("updateRoomIntent", {
       "slots": {
-        "room": "AMAZON.NUMBER",
-        "floor": "AMAZON.NUMBER",
-        "status": "STATUS_TYPE"
+        ROOM_NAME: "AMAZON.NUMBER",
+        FLOOR_NAME: "AMAZON.NUMBER",
+        STATUS_NAME: "STATUS_TYPE"
       },
       "utterances": [
-        "{mark|update|make} {room|} {-|room} on floor {-|floor} {|as|to} {-|status}",
-        "{mark|update|make} {room|} {-|room} on the {-|floor} {floor|} {|as|to} {-|status}"
+        "{mark|update|make} {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {as|to|} {-|" + STATUS_NAME + "}",
+        "{mark|update|make} {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {as|to|} {-|" + STATUS_NAME + "}"
       ]
     },
     function(request, response) {
-      var rm = request.slot("room"); // returns undefined when not found
-      var fl = request.slot("floor"); // returns undefined when not found
-      var st = request.slot("status"); // returns undefined when not found
+      var rm = request.slot(ROOM_NAME); // returns undefined when not found
+      var fl = request.slot(FLOOR_NAME); // returns undefined when not found
+      var st = request.slot(STATUS_NAME); // returns undefined when not found
       console.log("info: " + rm + ", " + fl + ", " + st);
 
       // check to see if we either have the floor or have set the floor previously
