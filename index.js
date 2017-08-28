@@ -23,6 +23,7 @@ var patientMealsApp = patientMeals(expressApp, alexa, IS_DEBUG);
 var apps = [];
 for (var key in alexa.apps) {
   apps.push("http://localhost:" + PORT + "/" + key);
+  apps.push("/" + key);
 }
 
 if (IS_DEBUG) {
