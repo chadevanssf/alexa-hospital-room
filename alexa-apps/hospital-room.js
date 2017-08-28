@@ -1,30 +1,5 @@
 var statuses = require("../custom-slot-types/status_type");
-
-var SESSION_FLOOR = "FLOOR";
-
-function setFloor(request, floor) {
-  if (request.hasSession()) {
-    var session = request.getSession();
-
-    if (floor) {
-      session.set(SESSION_FLOOR, floor);
-    }
-  }
-}
-
-function getFloor(request, defaultFloor) {
-  var floor = defaultFloor;
-  if (request.hasSession()) {
-    var session = request.getSession();
-
-    if (floor) {
-      setFloor(request, defaultFloor);
-    } else {
-      floor = session.get(SESSION_FLOOR);
-    }
-  }
-  return floor;
-}
+var roomUtilities = require("./hospital-room-utilities");
 
 module.exports = function(expressApp, alexa, isDebug) {
 
@@ -65,7 +40,7 @@ module.exports = function(expressApp, alexa, isDebug) {
     function(request, response) {
       var fl = request.slot("floor"); // returns undefined when not found
 
-      setFloor(request, fl);
+      roomUtilities.setFloor(request, fl);
 
       response.say("Now set to floor " + fl);
     }
@@ -89,7 +64,7 @@ module.exports = function(expressApp, alexa, isDebug) {
       //console.log("info: " + rm + ", " + fl + ", " + st);
 
       // check to see if we either have the floor or have set the floor previously
-      getFloor(request, fl);
+      roomUtilities.getAndSetFloor(request, fl);
 
       // determine if we should do a follow on to ask for the floor
 
