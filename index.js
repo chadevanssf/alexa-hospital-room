@@ -22,7 +22,6 @@ var patientMealsApp = patientMeals(expressApp, alexa, IS_DEBUG);
 // set up a default mapping so I don't have to know any of the names of the apps
 var apps = [];
 for (var key in alexa.apps) {
-  apps.push("http://localhost:" + PORT + "/" + key);
   apps.push("/" + key);
 }
 
@@ -34,5 +33,5 @@ if (IS_DEBUG) {
   });
 }
 
-var appsToTest = apps.join("\n");
+var appsToTest = "http://localhost:" + PORT + apps.join("\nhttp://localhost:" + PORT);
 expressApp.listen(PORT, () => console.log("Listening on port " + PORT + ", try:\n" + appsToTest));
