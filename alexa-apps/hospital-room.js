@@ -29,17 +29,18 @@ module.exports = function(expressApp, alexa, isDebug) {
 
   app.intent("updateRoomIntent", {
       "slots": {
-        "ROOM": "AMAZON.NUMBER",
-        "FLOOR": "AMAZON.NUMBER",
-        "STATUS": "STATUS_TYPE" },
+        "room": "AMAZON.NUMBER",
+        "floor": "AMAZON.NUMBER",
+        "status": "STATUS_TYPE" },
       "utterances": [
         "{mark|update|make} room {ROOM} on floor {FLOOR} {|as|to} {STATUS}"
       ]
     },
     function(request, response) {
-      var rm = request.slot('ROOM');
-      var fl = request.slot('FLOOR');
-      var st = request.slot('STATUS');
+      console.log();
+      var rm = request.slot("room");
+      var fl = request.slot("floor");
+      var st = request.slot("status");
       response.say("Room " + rm + " on floor " + fl + " was updated successfully to " + st);
     }
   );
