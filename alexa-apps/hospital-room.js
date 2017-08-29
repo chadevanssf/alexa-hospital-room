@@ -52,6 +52,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
 
       roomUtilities.setFloor(request, fl);
 
+      console.log("info at response: " + fl);
       response.say("Now set to floor " + fl);
       return;
     }
@@ -64,10 +65,10 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
         "updateStatus": "STATUS_TYPE"
       },
       "utterances": [
-        "{room|} {-|" + ROOM_NAME + "} {floor|} {-|" + FLOOR_NAME + "} {-|" + STATUS_NAME + "}",
-        "update {room|} {-|" + ROOM_NAME + "} {to|} {-|" + STATUS_NAME + "}",
+        //"{room|} {-|" + ROOM_NAME + "} {floor|} {-|" + FLOOR_NAME + "} {-|" + STATUS_NAME + "}",
         "update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|} {-|" + STATUS_NAME + "}",
         "update {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {to|} {-|" + STATUS_NAME + "}"
+        //"update {room|} {-|" + ROOM_NAME + "} {to|} {-|" + STATUS_NAME + "}"
       ]
     },
     function(request, response) {
@@ -77,7 +78,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       console.log("info: " + rm + ", " + fl + ", " + st);
 
       // check to see if we either have the floor or have set the floor previously
-      roomUtilities.getAndSetFloor(request, fl);
+      let newFl = roomUtilities.getAndSetFloor(request, fl);
 
       // determine if we should do a follow on to ask for the floor
       /*if (!fl) {
@@ -90,7 +91,8 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
 
         // todo: search the database to see the current status and to update it
 
-        response.say("Room " + rm + " on floor " + fl + " was updated successfully to " + st);
+        console.log("info at response: " + rm + ", " + newFl + ", " + st);
+        response.say("Room " + rm + " on floor " + newFl + " was updated successfully to " + st);
         return;
       //}
     }
