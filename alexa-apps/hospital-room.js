@@ -106,7 +106,9 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
 
       console.log("info at response: " + newRm + ", " + newFl + ", " + st);
 
-      pg.connect(process.env.DATABASE_URL, function(err, client) {
+      const pool = new pg.Pool();
+
+      pool.connect(process.env.DATABASE_URL, function(err, client, done) {
         if (err) throw err;
 
         console.log('Connected to postgres! Getting room...');
@@ -137,7 +139,12 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
           response.say("Room " + newRm + " on floor " + newFl + " was updated successfully to " + st);
           return;
         });
+
+        done();
       });
+
+      // pool shutdown
+      pool.end();
 
     }
   );
