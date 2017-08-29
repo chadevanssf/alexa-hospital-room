@@ -1,10 +1,6 @@
-const pg = require("pg");
-pg.defaults.ssl = true;
-const squelGeneric = require("squel");
-const squel = squelGeneric.useFlavour("postgres");
-
-const statuses = require("../custom-slot-types/status_type");
+const dbUtil = require("../util/db-util");
 const roomUtilities = require("./hospital-room-utilities");
+const statuses = require("../custom-slot-types/status_type");
 
 // must match the intent slot names
 const ROOM_NAME = "targetRoom";
@@ -89,8 +85,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       "utterances": [
         //"update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|} {-|" + STATUS_NAME + "}",
         //"update {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {to|} {-|" + STATUS_NAME + "}"
-        "update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|} {statuses}",
-        "update {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {to|} {statuses}"
+        "update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|as} {statuses}",
       ]
     },
     function(request, response) {
@@ -110,7 +105,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
 
       dbUtil.getRooms(newRm, newFl)
         .then((rows) => {
-          console.log("info at response: " + newRm + ", " + newFl);
+          console.log("info at db success: " + newRm + ", " + newFl);
           response.say("Succesfully updated room " + newRm + " on floor " + newFl + " to cleaned.");
         });
     }
@@ -121,7 +116,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       "utterances": []
     },
     function(request, response) {
-      let helpOutput = "You can say 'mark room 123 on floor 4 to clean' or ask 'what rooms are there to clean'. You can also say stop or exit to quit.";
+      let helpOutput = "You can say 'mark room 123 on floor 4 to cleaned' or ask 'what rooms are there to clean'. You can also say stop or exit to quit.";
       let reprompt = "What would you like to do?";
       // AMAZON.HelpIntent must leave session open -> .shouldEndSession(false)
       response.say(helpOutput).reprompt(reprompt).shouldEndSession(false);

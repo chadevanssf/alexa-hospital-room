@@ -1,24 +1,24 @@
-var express = require("express");
-var alexa = require("alexa-app");
+const express = require("express");
+const alexa = require("alexa-app");
 
-var dbUtil = require("./util/db-util");
+const dbUtil = require("./util/db-util");
 
 // require each of the alexa skills that are supported
-var hospitalRoom = require("./alexa-apps/hospital-room");
-var patientMeals = require("./alexa-apps/patient-meals");
+const hospitalRoom = require("./alexa-apps/hospital-room");
+const patientMeals = require("./alexa-apps/patient-meals");
 // Add additional Alexa Skill Apps here and below
 
 // use the environment var from Heroku if set
-var PORT = process.env.PORT || 8088;
+const PORT = process.env.PORT || 8088;
 const IS_DEBUG = true;
 
-var expressApp = express();
+const expressApp = express();
 
 expressApp.set("view engine", "ejs");
 
 // load the alexa apps, based on the required alexa skills apps
-var hospitalRoomApp = hospitalRoom.getApp(expressApp, alexa, IS_DEBUG);
-var patientMealsApp = patientMeals(expressApp, alexa, IS_DEBUG);
+const hospitalRoomApp = hospitalRoom.getApp(expressApp, alexa, IS_DEBUG);
+const patientMealsApp = patientMeals(expressApp, alexa, IS_DEBUG);
 // Add additional Alexa Skill Apps here and above
 
 // set up a default mapping so I don't have to know any of the names of the apps
