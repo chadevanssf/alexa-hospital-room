@@ -62,8 +62,8 @@ module.exports = function(expressApp, alexa, isDebug) {
       },
       "utterances": [
         "{room|} {-|" + ROOM_NAME + "} {floor|} {-|" + FLOOR_NAME + "} {-|" + STATUS_NAME + "}",
-        "{mark|update|make} {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {as|to|} {-|" + STATUS_NAME + "}",
-        "{mark|update|make} {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {as|to|} {-|" + STATUS_NAME + "}"
+        "update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|} {-|" + STATUS_NAME + "}",
+        "update {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {to|} {-|" + STATUS_NAME + "}"
       ]
     },
     function(request, response) {
@@ -76,10 +76,17 @@ module.exports = function(expressApp, alexa, isDebug) {
       roomUtilities.getAndSetFloor(request, fl);
 
       // determine if we should do a follow on to ask for the floor
+      if (!fl) {
+        response.say("What floor is the room on?")
+                .shouldEndSession(false)
+                .reprompt("I didn't get the floor, what was it again?")
+                .send();
+      } else {
 
-      // todo: search the database to see the current status and to update it
+        // todo: search the database to see the current status and to update it
 
-      response.say("Room " + rm + " on floor " + fl + " was updated successfully to " + st);
+        response.say("Room " + rm + " on floor " + fl + " was updated successfully to " + st);
+      }
     }
   );
 

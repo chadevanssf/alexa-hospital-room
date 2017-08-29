@@ -7,11 +7,11 @@ module.exports = {
       var session = request.getSession();
 
       if (floor) {
-        console.log("Setting floor: " + floor);
+        console.log("Setting " + SESSION_FLOOR + ": " + floor);
         session.set(SESSION_FLOOR, floor);
       }
     }
-    console.log("Final setFloor: " + floor);
+    console.log("Final set " + SESSION_FLOOR + ": " + floor);
   },
 
   getAndSetFloor: function(request, defaultFloor) {
@@ -21,13 +21,15 @@ module.exports = {
 
       if (floor) {
         setFloor(request, floor);
-        console.log("Current floor: " + floor);
+        console.log("Getting " + SESSION_FLOOR + ": " + floor);
       } else {
         floor = session.get(SESSION_FLOOR);
-        console.log("Getting previous floor: " + floor);
+        console.log("Getting previous " + SESSION_FLOOR + ": " + floor);
       }
     }
-    console.log("Final getAndSetFloor: " + floor);
+    console.log("Final get " + SESSION_FLOOR + ": " + floor);
     return floor;
   }
+
+
 }
