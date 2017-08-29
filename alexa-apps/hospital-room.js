@@ -95,7 +95,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       console.log("info: " + rm + ", " + fl + ", " + st);
 
       // check to see if we either have the room or have set the room previously
-      let newRm = roomUtilities.getAndSetFloor(request, rm);
+      let newRm = roomUtilities.getAndSetRoom(request, rm);
       // check to see if we either have the floor or have set the floor previously
       let newFl = roomUtilities.getAndSetFloor(request, fl);
 
