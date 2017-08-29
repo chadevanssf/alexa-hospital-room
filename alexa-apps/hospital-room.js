@@ -8,7 +8,9 @@ const ROOM_NAME = "targetRoom";
 const FLOOR_NAME = "targetFloor";
 const STATUS_NAME = "updateStatus";
 
-module.exports = function(expressApp, alexa, isDebug) {
+var hospitalRoom = {};
+
+hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
 
   // ALWAYS setup the alexa app and attach it to express before anything else.
   var app = new alexa.app("alexa-hospital-room");
@@ -127,5 +129,6 @@ module.exports = function(expressApp, alexa, isDebug) {
   );
 
   return app;
+};
 
-}; // end module.exports
+module.exports = hospitalRoom;

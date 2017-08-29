@@ -15,7 +15,7 @@ var expressApp = express();
 expressApp.set("view engine", "ejs");
 
 // load the alexa apps, based on the required alexa skills apps
-var hospitalRoomApp = hospitalRoom(expressApp, alexa, IS_DEBUG);
+var hospitalRoomApp = hospitalRoom.getApp(expressApp, alexa, IS_DEBUG);
 var patientMealsApp = patientMeals(expressApp, alexa, IS_DEBUG);
 // Add additional Alexa Skill Apps here and above
 
