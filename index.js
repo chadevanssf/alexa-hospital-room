@@ -10,7 +10,7 @@ const patientMeals = require("./alexa-apps/patient-meals");
 
 // use the environment var from Heroku if set
 const PORT = process.env.PORT || 8088;
-const IS_DEBUG = true;
+const IS_DEBUG = process.env.NODE_ENV != "production";
 
 const expressApp = express();
 
@@ -38,4 +38,14 @@ if (IS_DEBUG) {
 }
 
 let appsToTest = "http://localhost:" + PORT + apps.join("\nhttp://localhost:" + PORT);
-expressApp.listen(PORT, () => console.log("Listening on port " + PORT + ", try:\n" + appsToTest + "\n"));
+const server = expressApp.listen(PORT, () => {
+  console.log("Listening on port " + PORT + ", try:\n" + appsToTest + "\n");
+});
+
+process.on('SIGTERM', function () {
+  dbUtil.closePool();
+  server.close(() => {
+    console.log("Server Closed.");
+  });
+  process.exit(0);
+});

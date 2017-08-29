@@ -2,33 +2,35 @@
 
 testing the database access and data
 
-Config:
-
-<%= JSON.stringify(dbUtil.getDbConfig(), null, 2) %>
-
 queries:
 
 <%= dbUtil.getRoomQuery() %>
 <%= dbUtil.getRoomToCleanQuery() %>
 
+room to be cleaned:
+
+<%= JSON.stringify(finished, null, 2) %>
+
 rooms returned:
-<%= JSON.stringify(rows, null, 2) %>
+
+<%= JSON.stringify(rooms, null, 2) %>
 
 <ul>
-  <% rows.forEach(function(row){ %>
+  <% rooms.forEach(function(rm){ %>
     <li>
-      <%= JSON.stringify(row, null, 2) %>
+      <%= JSON.stringify(rm, null, 2) %>
     </li>
   <% }) %>
 </ul>
 
 needing cleaning rooms returned:
+
 <%= JSON.stringify(cleanedRooms, null, 2) %>
 
 <ul>
-  <% cleanedRooms.forEach(function(row){ %>
+  <% cleanedRooms.forEach(function(rm){ %>
     <li>
-      <%= JSON.stringify(row, null, 2) %>
+      <%= JSON.stringify(rm, null, 2) %>
     </li>
   <% }) %>
 </ul>

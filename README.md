@@ -78,3 +78,9 @@ Get the Postgres DB connection info:
 ```sh
 heroku pg:credentials:url DATABASE
 ```
+
+Set your app to be production:
+
+```sh
+export NODE_ENV=production
+```
