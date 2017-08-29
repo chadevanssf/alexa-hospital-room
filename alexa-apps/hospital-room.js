@@ -83,12 +83,14 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
   app.intent("updateRoomIntent", {
       "slots": {
         "targetRoom": "AMAZON.NUMBER",
-        "targetFloor": "AMAZON.NUMBER",
-        "updateStatus": "STATUS_TYPE"
+        "targetFloor": "AMAZON.NUMBER"
+        //"updateStatus": "STATUS_TYPE"
       },
       "utterances": [
-        "update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|} {-|" + STATUS_NAME + "}",
-        "update {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {to|} {-|" + STATUS_NAME + "}"
+        //"update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|} {-|" + STATUS_NAME + "}",
+        //"update {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {to|} {-|" + STATUS_NAME + "}"
+        "update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|} {statuses}",
+        "update {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {to|} {statuses}"
       ]
     },
     function(request, response) {
