@@ -104,7 +104,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       //console.log("info at response: " + newRm + ", " + newFl + ", " + st);
       console.log("info at response: " + newRm + ", " + newFl);
 
-      dbUtil.getRooms(newRm, newFl)
+      dbUtil.updateCleanRoom(newRm, newFl)
         .then((rows) => {
           console.log("info at db success: " + newRm + ", " + newFl);
           response.say("Succesfully updated room " + newRm + " on floor " + newFl + " to cleaned.");
