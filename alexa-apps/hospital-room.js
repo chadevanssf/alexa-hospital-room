@@ -37,7 +37,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
 
   app.dictionary = statuses;
 
-  app.intent("floorIntent", {
+  app.intent("getFloorIntent", {
     "slots": {
         "targetFloor": "AMAZON.NUMBER"
       },
@@ -47,7 +47,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       ]
     },
     function(request, response) {
-      var fl = request.slot("floor"); // returns undefined when not found
+      var fl = request.slot(FLOOR_NAME); // returns undefined when not found
       console.log("info: " + fl);
 
       roomUtilities.setFloor(request, fl);
@@ -79,17 +79,17 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       roomUtilities.getAndSetFloor(request, fl);
 
       // determine if we should do a follow on to ask for the floor
-      if (!fl) {
+      /*if (!fl) {
         response.say("What floor is the room on?")
                 .shouldEndSession(false)
                 .reprompt("I didn't get the floor, what was it again?")
                 .send();
-      } else {
+      } else {*/
 
         // todo: search the database to see the current status and to update it
 
         response.say("Room " + rm + " on floor " + fl + " was updated successfully to " + st);
-      }
+      //}
     }
   );
 
