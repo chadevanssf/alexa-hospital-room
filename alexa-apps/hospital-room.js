@@ -35,7 +35,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
   });
 
   app.dictionary = statuses;
-
+  /*
   app.intent("getRoomIntent", {
     "slots": {
         "targetRoom": "AMAZON.NUMBER"
@@ -46,12 +46,12 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
     },
     function(request, response) {
       let rm = request.slot(ROOM_NAME); // returns undefined when not found
-      console.log("info: " + rm);
+      console.log("info set room: " + rm);
 
       roomUtilities.setRoom(request, rm);
 
-      console.log("info at response: " + rm);
-      response.say("Now set to floor " + rm);
+      console.log("info at room response: " + rm);
+      response.say("Now set to room " + rm);
       return;
     }
   );
@@ -67,15 +67,16 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
     },
     function(request, response) {
       let fl = request.slot(FLOOR_NAME); // returns undefined when not found
-      console.log("info: " + fl);
+      console.log("info set floor: " + fl);
 
       roomUtilities.setFloor(request, fl);
 
-      console.log("info at response: " + fl);
+      console.log("info at floor response: " + fl);
       response.say("Now set to floor " + fl);
       return;
     }
   );
+  */
   app.intent("updateRoomIntent", {
       "slots": {
         "targetRoom": "AMAZON.NUMBER",
@@ -91,17 +92,17 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
     function(request, response) {
       let rm = request.slot(ROOM_NAME); // returns undefined when not found
       let fl = request.slot(FLOOR_NAME); // returns undefined when not found
-      let st = request.slot(STATUS_NAME); // returns undefined when not found
-      console.log("info: " + rm + ", " + fl + ", " + st);
+      //let st = request.slot(STATUS_NAME); // returns undefined when not found
+      //console.log("info: " + rm + ", " + fl + ", " + st);
+      console.log("info: " + rm + ", " + fl);
 
       // check to see if we either have the room or have set the room previously
       let newRm = roomUtilities.getAndSetRoom(request, rm);
       // check to see if we either have the floor or have set the floor previously
       let newFl = roomUtilities.getAndSetFloor(request, fl);
 
-      // todo: search the database to see the current status and to update it
-
-      console.log("info at response: " + newRm + ", " + newFl + ", " + st);
+      //console.log("info at response: " + newRm + ", " + newFl + ", " + st);
+      console.log("info at response: " + newRm + ", " + newFl);
 
       dbUtil.getRooms(newRm, newFl)
         .then((rows) => {
