@@ -44,4 +44,4 @@ module.exports = function(expressApp, alexa, isDebug) {
 
   return alexaApp;
 
-}
+}; // end module.exports

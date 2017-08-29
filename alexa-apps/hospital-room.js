@@ -4,9 +4,9 @@ var statuses = require("../custom-slot-types/status_type");
 var roomUtilities = require("./hospital-room-utilities");
 
 // must match the intent slot names
-var ROOM_NAME = "targetRoom";
-var FLOOR_NAME = "targetFloor";
-var STATUS_NAME = "updateStatus";
+const ROOM_NAME = "targetRoom";
+const FLOOR_NAME = "targetFloor";
+const STATUS_NAME = "updateStatus";
 
 module.exports = function(expressApp, alexa, isDebug) {
 
@@ -62,6 +62,7 @@ module.exports = function(expressApp, alexa, isDebug) {
       },
       "utterances": [
         "{room|} {-|" + ROOM_NAME + "} {floor|} {-|" + FLOOR_NAME + "} {-|" + STATUS_NAME + "}",
+        "update {room|} {-|" + ROOM_NAME + "} {to|} {-|" + STATUS_NAME + "}",
         "update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|} {-|" + STATUS_NAME + "}",
         "update {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {to|} {-|" + STATUS_NAME + "}"
       ]
@@ -127,4 +128,4 @@ module.exports = function(expressApp, alexa, isDebug) {
 
   return app;
 
-} // end module.exports
+}; // end module.exports

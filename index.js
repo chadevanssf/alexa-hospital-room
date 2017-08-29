@@ -8,7 +8,7 @@ var patientMeals = require("./alexa-apps/patient-meals");
 
 // use the environment var from Heroku if set
 var PORT = process.env.PORT || 8080;
-var IS_DEBUG = true;
+const IS_DEBUG = true;
 
 var expressApp = express();
 
