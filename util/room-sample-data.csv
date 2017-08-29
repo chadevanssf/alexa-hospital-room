@@ -1,0 +1,6 @@
+"systemmodstamp","createddate","floor__c","id","sfid","_hc_err","room_id__c","status__c","name","_hc_lastop","ownerid","room__c","isdeleted","alexa_is_ready__c"
+"2017-08-29 02:55:09","2017-08-22 18:22:51","2",1,"a024100000OVy9WAAT","","7b706947-b050-43b0-90df-2f70b08319ee","Needing Cleaning","02-467","SYNCED","00541000003kUgCAAU","467",False,False
+"2017-08-29 02:55:09","2017-08-22 18:12:22","1",2,"a024100000OVy7KAAT","","254643f8-28a2-4a87-918a-0d1de3e565e2","Occupied","01-234","SYNCED","00541000001V2VKAA0","234",False,False
+"2017-08-29 02:55:09","2017-08-22 18:12:36","2",3,"a024100000OVy7LAAT","","b84e07fc-a7ee-41bc-bac3-1b9eed1db32a","Available","02-176","SYNCED","00541000001V2VKAA0","176",False,False
+"2017-08-29 02:55:09","2017-08-22 18:12:57","4",4,"a024100000OVy7UAAT","","32ab87db-3238-4824-a378-38a67ed3fb1f","Needing Maintenance","04-298","SYNCED","00541000003kUgCAAU","298",False,False
+"2017-08-29 02:55:09","2017-08-22 18:18:30","3",5,"a024100000OVy8hAAD","","c5a3492a-0a32-4d5f-a9ef-76f053922bd3","Needing Cleaning","03-745","SYNCED","00541000001V2VKAA0","745",False,False

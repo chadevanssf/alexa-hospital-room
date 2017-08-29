@@ -1,0 +1,20 @@
+<div style="white-space:pre;border:1px solid black;margin:5px;padding:5px;font-family:monospace;">
+
+testing the database access and data
+
+url: <%= dbUtil.getDbUrl() %>
+
+query: <%= dbUtil.getRoomQuery() %>
+
+rooms returned:
+<%= JSON.stringify(rows, null, 2) %>
+
+<ul>
+  <% rows.forEach(function(row){ %>
+    <li>
+      <%= JSON.stringify(row, null, 2) %>
+    </li>
+  <% }) %>
+</ul>
+
+</div>

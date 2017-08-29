@@ -1,6 +1,8 @@
 var express = require("express");
 var alexa = require("alexa-app");
 
+var dbUtil = require("./util/db-util");
+
 // require each of the alexa skills that are supported
 var hospitalRoom = require("./alexa-apps/hospital-room");
 var patientMeals = require("./alexa-apps/patient-meals");
@@ -31,7 +33,9 @@ if (IS_DEBUG) {
       "apps": apps,
     });
   });
+
+  expressApp.get("/db", dbUtil.renderTest);
 }
 
 let appsToTest = "http://localhost:" + PORT + apps.join("\nhttp://localhost:" + PORT);
-expressApp.listen(PORT, () => console.log("Listening on port " + PORT + ", try:\n" + appsToTest));
+expressApp.listen(PORT, () => console.log("Listening on port " + PORT + ", try:\n" + appsToTest + "\n"));

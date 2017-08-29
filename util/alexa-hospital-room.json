@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "connection": {
+    "app_name": "alexa-hospital-room"
+  },
+  "mappings": [
+    {
+      "config": {
+        "sf_polling_seconds": 600,
+        "upsert_field": "Room_ID__c",
+        "indexes": {
+          "SystemModstamp": {
+            "unique": false
+          },
+          "Id": {
+            "unique": true
+          },
+          "Room_ID__c": {
+            "unique": true
+          }
+        },
+        "sf_max_daily_api_calls": 30000,
+        "sf_notify_enabled": true,
+        "fields": {
+          "Room__c": {},
+          "CreatedDate": {},
+          "SystemModstamp": {},
+          "IsDeleted": {},
+          "Room_ID__c": {},
+          "Status__c": {},
+          "OwnerId": {},
+          "Id": {},
+          "Floor__c": {},
+          "Name": {},
+          "Alexa_Is_Ready__c": {}
+        },
+        "access": "read_write"
+      },
+      "object_name": "Hospital_Room__c"
+    }
+  ]
+}

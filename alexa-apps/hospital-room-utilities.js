@@ -1,7 +1,7 @@
-var SESSION_ROOM = "HRM_ROOM";
-var SESSION_FLOOR = "HRM_FLOOR";
+const SESSION_ROOM = "HRM_ROOM";
+const SESSION_FLOOR = "HRM_FLOOR";
 
-var roomUtilities = {};
+const roomUtilities = {};
 
 // set the room for use later
 roomUtilities.setRoom = function(request, val) {
