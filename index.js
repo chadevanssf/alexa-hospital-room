@@ -2,6 +2,7 @@ const express = require("express");
 const alexa = require("alexa-app");
 
 const dbUtil = require("./util/db-util");
+const roomUtilities = require("./alexa-apps/hospital-room-utilities");
 
 // require each of the alexa skills that are supported
 const hospitalRoom = require("./alexa-apps/hospital-room");
@@ -35,6 +36,8 @@ if (IS_DEBUG) {
   });
 
   expressApp.get("/db", dbUtil.renderTest);
+
+  expressApp.get("/util", roomUtilities.renderTest);
 }
 
 let appsToTest = "http://localhost:" + PORT + apps.join("\nhttp://localhost:" + PORT);

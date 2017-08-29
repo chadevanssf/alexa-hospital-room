@@ -35,48 +35,26 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
   });
 
   app.dictionary = statuses;
-  /*
-  app.intent("getRoomIntent", {
-    "slots": {
-        "targetRoom": "AMAZON.NUMBER"
-      },
+
+  app.intent("listRoomsIntent", {
+    "slots": {},
     "utterances": [
-        "{I am|I'm|} {at|in} room {-|" + ROOM_NAME + "}"
+        "{what|list of|what are my} rooms to {clean|finish|do}"
       ]
     },
     function(request, response) {
-      let rm = request.slot(ROOM_NAME); // returns undefined when not found
-      console.log("info set room: " + rm);
+      console.log("info at list");
+      dbUtil.getRoomsToClean()
+        .then((rows) => {
+          console.log("list at db success");
 
-      roomUtilities.setRoom(request, rm);
-
-      console.log("info at room response: " + rm);
-      response.say("Now set to room " + rm);
+          var reponse = roomUtilities.getListResponse(rows);
+          response.say("The list of rooms to clean is " + response);
+        });
       return;
     }
   );
 
-  app.intent("getFloorIntent", {
-    "slots": {
-        "targetFloor": "AMAZON.NUMBER"
-      },
-    "utterances": [
-        "{I am|I'm|} on floor {-|" + FLOOR_NAME + "}",
-        "{I am|I'm|} on the {-|" + FLOOR_NAME + "} {floor|}"
-      ]
-    },
-    function(request, response) {
-      let fl = request.slot(FLOOR_NAME); // returns undefined when not found
-      console.log("info set floor: " + fl);
-
-      roomUtilities.setFloor(request, fl);
-
-      console.log("info at floor response: " + fl);
-      response.say("Now set to floor " + fl);
-      return;
-    }
-  );
-  */
   app.intent("updateRoomIntent", {
       "slots": {
         "targetRoom": "AMAZON.NUMBER",
