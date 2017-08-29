@@ -8,11 +8,26 @@ const DB_SCHEMA = "salesforce"; // default schema name for Heroku Connect
 
 const dbUtil = {};
 
-dbUtil.getDbUrl = function() {
-  return process.env.DATABASE_URL;
+dbUtil.getDbConfig = function() {
+  return {
+    connectionString: process.env.DATABASE_URL
+  };
 };
 
-dbUtil.getRoomQuery = function(newRm, newFl) {
+dbUtil.getRoomQuery = function() {
+  return dbUtil.getBaseRoomQuery()
+    .where("room__c = $1")
+    .where("floor__c = $2")
+    .toString();
+};
+
+dbUtil.getRoomToCleanQuery = function() {
+  return dbUtil.getBaseRoomQuery()
+    .where("status__c = ?", "Needing Cleaning")
+    .toString();
+};
+
+dbUtil.getBaseRoomQuery = function() {
   return squel.select()
     .from(DB_SCHEMA + ".hospital_room__c")
     .field("room__c")
@@ -20,43 +35,53 @@ dbUtil.getRoomQuery = function(newRm, newFl) {
     .field("status__c")
     .field("alexa_is_ready__c")
     .field("name")
-    .field("sfid")
-    .where("room__c = $1")
-    .where("floor__c = $2")
-    .toString();
+    .field("sfid");
 };
 
 dbUtil.getRooms = function(newRm, newFl) {
-
-  const promise = new Promise(function(resolve, reject) {
-
-    const pool = new pg.Pool({
-      connectionString: dbUtil.getDbUrl()
-    });
+  return new Promise(function(resolve, reject) {
+    const pool = new pg.Pool(dbUtil.getDbConfig());
 
     const queryToRun = {
-      text: dbUtil.getRoomQuery(newRm, newFl),
+      text: dbUtil.getRoomQuery(),
       values: [newRm, newFl]
     };
 
     pool.query(queryToRun)
-      .then((res) => {
+      .then( res => {
         resolve(res.rows);
       })
-      .catch((e) => {
-        console.error(e.stack);
-      });
+      .catch( e => console.error(e.stack) );
   });
+};
 
-  return promise;
+dbUtil.getRoomsToClean = function() {
+  return new Promise(function(resolve, reject) {
+    const pool = new pg.Pool(dbUtil.getDbConfig());
+
+    const queryToRun = {
+      text: dbUtil.getRoomToCleanQuery(),
+      values: []
+    };
+
+    pool.query(queryToRun)
+      .then( res => {
+        resolve(res.rows);
+      })
+      .catch( e => console.error(e.stack) );
+  });
 };
 
 dbUtil.renderTest = function(req, res) {
-  dbUtil.getRooms("234", "1")
-    .then((rows) => {
+  Promise.all([
+      dbUtil.getRooms("234", "1"),
+      dbUtil.getRoomsToClean()
+    ])
+    .then(([rooms, cleanedRooms]) => {
       res.render("db-test", {
         "dbUtil": dbUtil,
-        "rows": rows
+        "rows": rooms,
+        "cleanedRooms": cleanedRooms
       });
     });
 };

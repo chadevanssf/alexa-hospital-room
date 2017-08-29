@@ -5,7 +5,7 @@ const statuses = require("../custom-slot-types/status_type");
 // must match the intent slot names
 const ROOM_NAME = "targetRoom";
 const FLOOR_NAME = "targetFloor";
-const STATUS_NAME = "updateStatus";
+//const STATUS_NAME = "updateStatus";
 
 const hospitalRoom = {};
 
