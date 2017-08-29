@@ -13,7 +13,7 @@ var hospitalRoom = {};
 hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
 
   // ALWAYS setup the alexa app and attach it to express before anything else.
-  var app = new alexa.app("alexa-hospital-room");
+  let app = new alexa.app("alexa-hospital-room");
 
   app.express({
     expressApp: expressApp,
@@ -47,12 +47,13 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       ]
     },
     function(request, response) {
-      var fl = request.slot(FLOOR_NAME); // returns undefined when not found
+      let fl = request.slot(FLOOR_NAME); // returns undefined when not found
       console.log("info: " + fl);
 
       roomUtilities.setFloor(request, fl);
 
       response.say("Now set to floor " + fl);
+      return;
     }
   );
 
@@ -70,9 +71,9 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       ]
     },
     function(request, response) {
-      var rm = request.slot(ROOM_NAME); // returns undefined when not found
-      var fl = request.slot(FLOOR_NAME); // returns undefined when not found
-      var st = request.slot(STATUS_NAME); // returns undefined when not found
+      let rm = request.slot(ROOM_NAME); // returns undefined when not found
+      let fl = request.slot(FLOOR_NAME); // returns undefined when not found
+      let st = request.slot(STATUS_NAME); // returns undefined when not found
       console.log("info: " + rm + ", " + fl + ", " + st);
 
       // check to see if we either have the floor or have set the floor previously
@@ -84,11 +85,13 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
                 .shouldEndSession(false)
                 .reprompt("I didn't get the floor, what was it again?")
                 .send();
+        return;
       } else {*/
 
         // todo: search the database to see the current status and to update it
 
         response.say("Room " + rm + " on floor " + fl + " was updated successfully to " + st);
+        return;
       //}
     }
   );
@@ -98,8 +101,8 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       "utterances": []
     },
     function(request, response) {
-      var helpOutput = "You can say 'mark room 123 on floor 4 to clean' or ask 'what rooms are there to clean'. You can also say stop or exit to quit.";
-      var reprompt = "What would you like to do?";
+      let helpOutput = "You can say 'mark room 123 on floor 4 to clean' or ask 'what rooms are there to clean'. You can also say stop or exit to quit.";
+      let reprompt = "What would you like to do?";
       // AMAZON.HelpIntent must leave session open -> .shouldEndSession(false)
       response.say(helpOutput).reprompt(reprompt).shouldEndSession(false);
       return;
@@ -111,7 +114,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       "utterances": []
     },
     function(request, response) {
-      var stopOutput = "The Hospital Room Manager is finished for now.";
+      let stopOutput = "The Hospital Room Manager is finished for now.";
       response.say(stopOutput);
       return;
     }

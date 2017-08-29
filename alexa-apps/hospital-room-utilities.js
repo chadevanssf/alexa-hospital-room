@@ -13,7 +13,7 @@ roomUtilities.getAndSetFloor = function(request, defaultVal) {
 
 roomUtilities.setSessionValue = function(request, val, sessionName) {
   if (request.hasSession()) {
-    var session = request.getSession();
+    let session = request.getSession();
 
     if (val) {
       console.log("Setting " + sessionName + ": " + val);
@@ -24,15 +24,15 @@ roomUtilities.setSessionValue = function(request, val, sessionName) {
 };
 
 roomUtilities.getAndSetSessionValue = function(request, defaultVal, sessionName) {
-  var val = defaultVal;
+  let val = defaultVal;
   if (request.hasSession()) {
-    var session = request.getSession();
+    let session = request.getSession();
 
     if (val) {
       roomUtilities.setSessionValue(request, val, sessionName);
       console.log("Getting " + sessionName + ": " + val);
     } else {
-      floor = session.get(sessionName);
+      val = session.get(sessionName);
       console.log("Getting previous " + sessionName + ": " + val);
     }
   }

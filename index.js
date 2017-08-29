@@ -20,7 +20,7 @@ var patientMealsApp = patientMeals(expressApp, alexa, IS_DEBUG);
 // Add additional Alexa Skill Apps here and above
 
 // set up a default mapping so I don't have to know any of the names of the apps
-var apps = [];
+let apps = [];
 for (var key in alexa.apps) {
   apps.push("/" + key);
 }
@@ -33,5 +33,5 @@ if (IS_DEBUG) {
   });
 }
 
-var appsToTest = "http://localhost:" + PORT + apps.join("\nhttp://localhost:" + PORT);
+let appsToTest = "http://localhost:" + PORT + apps.join("\nhttp://localhost:" + PORT);
 expressApp.listen(PORT, () => console.log("Listening on port " + PORT + ", try:\n" + appsToTest));
