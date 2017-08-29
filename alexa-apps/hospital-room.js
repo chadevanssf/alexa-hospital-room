@@ -3,9 +3,10 @@ var pg = require("pg");
 var statuses = require("../custom-slot-types/status_type");
 var roomUtilities = require("./hospital-room-utilities");
 
-var ROOM_NAME = "room";
-var FLOOR_NAME = "floor";
-var STATUS_NAME = "status";
+// must match the intent slot names
+var ROOM_NAME = "targetRoom";
+var FLOOR_NAME = "targetFloor";
+var STATUS_NAME = "updateStatus";
 
 module.exports = function(expressApp, alexa, isDebug) {
 
@@ -36,12 +37,11 @@ module.exports = function(expressApp, alexa, isDebug) {
 
   app.intent("floorIntent", {
     "slots": {
-        "floor": "AMAZON.NUMBER"
+        "targetFloor": "AMAZON.NUMBER"
       },
     "utterances": [
-        "{I am|I'm} on floor {-|" + FLOOR_NAME + "}",
-        "{I am|I'm} on the {-|" + FLOOR_NAME + "} {floor|}",
-        "on the {-|" + FLOOR_NAME + "} {floor|}"
+        "{I am|I'm|} on floor {-|" + FLOOR_NAME + "}",
+        "{I am|I'm|} on the {-|" + FLOOR_NAME + "} {floor|}"
       ]
     },
     function(request, response) {
@@ -56,11 +56,12 @@ module.exports = function(expressApp, alexa, isDebug) {
 
   app.intent("updateRoomIntent", {
       "slots": {
-        "room": "AMAZON.NUMBER",
-        "floor": "AMAZON.NUMBER",
-        "status": "STATUS_TYPE"
+        "targetRoom": "AMAZON.NUMBER",
+        "targetFloor": "AMAZON.NUMBER",
+        "updateStatus": "STATUS_TYPE"
       },
       "utterances": [
+        "{room|} {-|" + ROOM_NAME + "} {floor|} {-|" + FLOOR_NAME + "} {-|" + STATUS_NAME + "}",
         "{mark|update|make} {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {as|to|} {-|" + STATUS_NAME + "}",
         "{mark|update|make} {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {as|to|} {-|" + STATUS_NAME + "}"
       ]
@@ -87,7 +88,7 @@ module.exports = function(expressApp, alexa, isDebug) {
       "utterances": []
     },
     function(request, response) {
-      var helpOutput = "You can say 'mark room on floor to clean' or ask 'what rooms are there to clean'. You can also say stop or exit to quit.";
+      var helpOutput = "You can say 'mark room 123 on floor 4 to clean' or ask 'what rooms are there to clean'. You can also say stop or exit to quit.";
       var reprompt = "What would you like to do?";
       // AMAZON.HelpIntent must leave session open -> .shouldEndSession(false)
       response.say(helpOutput).reprompt(reprompt).shouldEndSession(false);
