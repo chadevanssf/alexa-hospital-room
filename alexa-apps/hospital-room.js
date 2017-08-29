@@ -108,46 +108,11 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
 
       console.log("info at response: " + newRm + ", " + newFl + ", " + st);
 
-      const pool = new pg.Pool();
-
-      pool.connect(process.env.DATABASE_URL, function(err, client, done) {
-        if (err) throw err;
-
-        console.log('Connected to postgres! Getting room...');
-
-        const results = [];
-
-        // SQL Query > Select Data
-        const query = client.query(squel.select()
-          .from("salesforce.hospital_room__c")
-          .field("room__c")
-          .field("floor__c")
-          .field("status__c")
-          .field("alexa_is_ready__c")
-          .field("name")
-          .field("sfid")
-          .where("room__c = '?'", newRm)
-          .where("floor__c = '?'", newFl)
-          .toString()
-        );
-        // Stream results back one row at a time
-        query.on("row", (row) => {
-          console.log(JSON.stringify(row));
-          results.push(row);
+      dbUtil.getRooms(newRm, newFl)
+        .then((rows) => {
+          console.log("info at response: " + newRm + ", " + newFl);
+          response.say("Succesfully updated room " + newRm + " on floor " + newFl + " to cleaned.");
         });
-        // After all data is returned, close connection and return results
-        query.on("end", () => {
-          done();
-          response.say("Room " + newRm + " on floor " + newFl + " was updated successfully to " + st);
-          return;
-        });
-
-        done();
-      });
-
-      // pool shutdown
-      pool.end();
-
     }
   );
 
