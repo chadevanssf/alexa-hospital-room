@@ -3,6 +3,17 @@ var SESSION_FLOOR = "HRM_FLOOR";
 
 var roomUtilities = {};
 
+// set the room for use later
+roomUtilities.setRoom = function(request, val) {
+  roomUtilities.setSessionValue(request, val, SESSION_ROOM);
+};
+
+// return room if not assigned
+// set and return the room if assigned
+roomUtilities.getAndSetRoom = function(request, defaultVal) {
+  return roomUtilities.getAndSetSessionValue(request, defaultVal, SESSION_ROOM);
+};
+
 // set the floor for use later
 roomUtilities.setFloor = function(request, val) {
   roomUtilities.setSessionValue(request, val, SESSION_FLOOR);
@@ -13,6 +24,7 @@ roomUtilities.setFloor = function(request, val) {
 roomUtilities.getAndSetFloor = function(request, defaultVal) {
   return roomUtilities.getAndSetSessionValue(request, defaultVal, SESSION_FLOOR);
 };
+
 
 roomUtilities.setSessionValue = function(request, val, sessionName) {
   if (request.hasSession()) {

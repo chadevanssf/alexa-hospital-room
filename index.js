@@ -7,7 +7,7 @@ var patientMeals = require("./alexa-apps/patient-meals");
 // Add additional Alexa Skill Apps here and below
 
 // use the environment var from Heroku if set
-var PORT = process.env.PORT || 8080;
+var PORT = process.env.PORT || 8088;
 const IS_DEBUG = true;
 
 var expressApp = express();

@@ -1,14 +1,17 @@
-var pg = require("pg");
+const pg = require("pg");
+pg.defaults.ssl = true;
+const squelGeneric = require("squel");
+const squel = squelGeneric.useFlavour("postgres");
 
-var statuses = require("../custom-slot-types/status_type");
-var roomUtilities = require("./hospital-room-utilities");
+const statuses = require("../custom-slot-types/status_type");
+const roomUtilities = require("./hospital-room-utilities");
 
 // must match the intent slot names
 const ROOM_NAME = "targetRoom";
 const FLOOR_NAME = "targetFloor";
 const STATUS_NAME = "updateStatus";
 
-var hospitalRoom = {};
+const hospitalRoom = {};
 
 hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
 
@@ -32,10 +35,30 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
   // now POST calls to /{app.name} in express will be handled by the app.request() function
 
   app.launch(function(request, response) {
-    response.say("Welcome to the Hospital Room Manager! Ask for rooms to be cleaned or to mark a room as cleaned.");
+    response.say("Welcome to the Hospital Room Manager! Ask to mark a room as cleaned or for a list of rooms to be cleaned.");
   });
 
   app.dictionary = statuses;
+
+  app.intent("getRoomIntent", {
+    "slots": {
+        "targetRoom": "AMAZON.NUMBER"
+      },
+    "utterances": [
+        "{I am|I'm|} {at|in} room {-|" + ROOM_NAME + "}"
+      ]
+    },
+    function(request, response) {
+      let rm = request.slot(ROOM_NAME); // returns undefined when not found
+      console.log("info: " + rm);
+
+      roomUtilities.setRoom(request, rm);
+
+      console.log("info at response: " + rm);
+      response.say("Now set to floor " + rm);
+      return;
+    }
+  );
 
   app.intent("getFloorIntent", {
     "slots": {
@@ -57,7 +80,6 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       return;
     }
   );
-
   app.intent("updateRoomIntent", {
       "slots": {
         "targetRoom": "AMAZON.NUMBER",
@@ -65,10 +87,8 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
         "updateStatus": "STATUS_TYPE"
       },
       "utterances": [
-        //"{room|} {-|" + ROOM_NAME + "} {floor|} {-|" + FLOOR_NAME + "} {-|" + STATUS_NAME + "}",
         "update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|} {-|" + STATUS_NAME + "}",
         "update {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {to|} {-|" + STATUS_NAME + "}"
-        //"update {room|} {-|" + ROOM_NAME + "} {to|} {-|" + STATUS_NAME + "}"
       ]
     },
     function(request, response) {
@@ -77,24 +97,48 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       let st = request.slot(STATUS_NAME); // returns undefined when not found
       console.log("info: " + rm + ", " + fl + ", " + st);
 
+      // check to see if we either have the room or have set the room previously
+      let newRm = roomUtilities.getAndSetFloor(request, rm);
       // check to see if we either have the floor or have set the floor previously
       let newFl = roomUtilities.getAndSetFloor(request, fl);
 
-      // determine if we should do a follow on to ask for the floor
-      /*if (!fl) {
-        response.say("What floor is the room on?")
-                .shouldEndSession(false)
-                .reprompt("I didn't get the floor, what was it again?")
-                .send();
-        return;
-      } else {*/
+      // todo: search the database to see the current status and to update it
 
-        // todo: search the database to see the current status and to update it
+      console.log("info at response: " + newRm + ", " + newFl + ", " + st);
 
-        console.log("info at response: " + rm + ", " + newFl + ", " + st);
-        response.say("Room " + rm + " on floor " + newFl + " was updated successfully to " + st);
-        return;
-      //}
+      pg.connect(process.env.DATABASE_URL, function(err, client) {
+        if (err) throw err;
+
+        console.log('Connected to postgres! Getting room...');
+
+        const results = [];
+
+        // SQL Query > Select Data
+        const query = client.query(squel.select()
+          .from("salesforce.hospital_room__c")
+          .field("room__c")
+          .field("floor__c")
+          .field("status__c")
+          .field("alexa_is_ready__c")
+          .field("name")
+          .field("sfid")
+          .where("room__c = '?'", newRm)
+          .where("floor__c = '?'", newFl)
+          .toString()
+        );
+        // Stream results back one row at a time
+        query.on("row", (row) => {
+          console.log(JSON.stringify(row));
+          results.push(row);
+        });
+        // After all data is returned, close connection and return results
+        query.on("end", () => {
+          done();
+          response.say("Room " + newRm + " on floor " + newFl + " was updated successfully to " + st);
+          return;
+        });
+      });
+
     }
   );
 
