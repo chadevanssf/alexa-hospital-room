@@ -31,7 +31,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
   // now POST calls to /{app.name} in express will be handled by the app.request() function
 
   app.launch(function(request, response) {
-    response.say("Welcome to the Hospital Room Manager! Ask to mark a room as cleaned or for a list of rooms to be cleaned.");
+    response.say("Welcome to the Hospital Room Manager! Ask to mark a room as cleaned or for a list of rooms to clean.");
   });
 
   app.dictionary = statuses;
@@ -49,7 +49,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
           console.log("list at db success");
 
           var reponse = roomUtilities.getListResponse(rows);
-          response.say("The list of rooms to clean is " + response);
+          response.say("The list of rooms to clean is ready.");
         });
       return;
     }
@@ -95,7 +95,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       "utterances": []
     },
     function(request, response) {
-      let helpOutput = "You can say 'mark room 123 on floor 4 to cleaned' or ask 'what rooms are there to clean'. You can also say stop or exit to quit.";
+      let helpOutput = "You can say 'update room 123 on floor 4 to cleaned', or ask 'what rooms are there to clean'. You can also say stop or exit to quit.";
       let reprompt = "What would you like to do?";
       // AMAZON.HelpIntent must leave session open -> .shouldEndSession(false)
       response.say(helpOutput).reprompt(reprompt).shouldEndSession(false);

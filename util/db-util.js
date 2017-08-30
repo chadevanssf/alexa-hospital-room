@@ -46,6 +46,7 @@ dbUtil.getRoomToCleanQuery = function() {
     .where("status__c = ?", "Needing Cleaning")
     .order("floor__c")
     .order("room__c")
+    .limit(5)
     .toString();
 };
 
