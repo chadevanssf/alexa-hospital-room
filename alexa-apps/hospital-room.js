@@ -44,12 +44,13 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
     },
     function(request, response) {
       console.log("info at list");
+      response.say("Getting a list of rooms").shouldEndSession(false).send();
       dbUtil.getRoomsToClean()
         .then((rows) => {
           console.log("list at db success");
 
           var reponse = roomUtilities.getListResponse(rows);
-          response.say("The list of rooms to clean is ready.");
+          response.say("The list of rooms to clean are " + reponse);
         });
       return;
     }
