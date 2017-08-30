@@ -73,6 +73,8 @@ roomUtilities.getListResponse = function(rows) {
     }
   });
 
+  console.log("getListResponse: " + response);
+
   return response;
 };
 

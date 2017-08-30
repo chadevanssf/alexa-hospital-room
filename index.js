@@ -10,12 +10,14 @@ const patientMeals = require("./alexa-apps/patient-meals");
 // Add additional Alexa Skill Apps here and below
 
 // use the environment var from Heroku if set
-const PORT = process.env.PORT || 8088;
 const IS_DEBUG = process.env.NODE_ENV != "production";
 
 const expressApp = express();
 
 expressApp.set("view engine", "ejs");
+
+// use the environment var from Heroku if set
+expressApp.set("port", (process.env.PORT || 8088));
 
 // load the alexa apps, based on the required alexa skills apps
 const hospitalRoomApp = hospitalRoom.getApp(expressApp, alexa, IS_DEBUG);
@@ -40,9 +42,9 @@ if (IS_DEBUG) {
   expressApp.get("/util", roomUtilities.renderTest);
 }
 
-let appsToTest = "http://localhost:" + PORT + apps.join("\nhttp://localhost:" + PORT);
-const server = expressApp.listen(PORT, () => {
-  console.log("Listening on port " + PORT + ", try:\n" + appsToTest + "\n");
+let appsToTest = "http://localhost:" + expressApp.get("port") + apps.join("\nhttp://localhost:" + expressApp.get("port"));
+const server = expressApp.listen(expressApp.get("port"), () => {
+  console.log("Listening on port " + expressApp.get("port") + ", try:\n" + appsToTest + "\n");
 });
 
 process.on('SIGTERM', function () {
