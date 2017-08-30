@@ -44,7 +44,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
     },
     function(request, response) {
       console.log("info at list");
-      response.say("Getting a list of rooms").shouldEndSession(false).send();
+      response.say("Getting a list of rooms<break time=\"3s\">").shouldEndSession(false).send();
       dbUtil.getRoomsToClean()
         .then((rows) => {
           console.log("list at db success");
@@ -82,6 +82,8 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
 
       //console.log("info at response: " + newRm + ", " + newFl + ", " + st);
       console.log("info at response: " + newRm + ", " + newFl);
+
+      response.say("Updating the room<break time=\"3s\">").shouldEndSession(false).send();
 
       dbUtil.updateCleanRoom(newRm, newFl)
         .then((rows) => {
