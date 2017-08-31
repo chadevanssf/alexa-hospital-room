@@ -5,7 +5,6 @@ const statuses = require("../custom-slot-types/status_type");
 // must match the intent slot names
 const ROOM_NAME = "targetRoom";
 const FLOOR_NAME = "targetFloor";
-//const STATUS_NAME = "updateStatus";
 
 const hospitalRoom = {};
 
@@ -45,14 +44,13 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
     function(request, response) {
       console.log("info at list");
       response.say("Getting a list of rooms<break time=\"3s\" />").shouldEndSession(false).send();
-      dbUtil.getRoomsToClean()
+      return dbUtil.getRoomsToClean()
         .then((rows) => {
           console.log("list at db success");
 
           var reponse = roomUtilities.getListResponse(rows);
           response.say("The list of rooms to clean are " + reponse);
         });
-      return;
     }
   );
 
@@ -60,19 +58,14 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       "slots": {
         "targetRoom": "AMAZON.NUMBER",
         "targetFloor": "AMAZON.NUMBER"
-        //"updateStatus": "STATUS_TYPE"
       },
       "utterances": [
-        //"update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|} {-|" + STATUS_NAME + "}",
-        //"update {room|} {-|" + ROOM_NAME + "} on the {-|" + FLOOR_NAME + "} {floor|} {to|} {-|" + STATUS_NAME + "}"
-        "update {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "} {to|as} {statuses}",
+        "{update|finished} {room|} {-|" + ROOM_NAME + "} on floor {-|" + FLOOR_NAME + "}",
       ]
     },
     function(request, response) {
       let rm = request.slot(ROOM_NAME); // returns undefined when not found
       let fl = request.slot(FLOOR_NAME); // returns undefined when not found
-      //let st = request.slot(STATUS_NAME); // returns undefined when not found
-      //console.log("info: " + rm + ", " + fl + ", " + st);
       console.log("info: " + rm + ", " + fl);
 
       // check to see if we either have the room or have set the room previously
@@ -80,12 +73,9 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
       // check to see if we either have the floor or have set the floor previously
       let newFl = roomUtilities.getAndSetFloor(request, fl);
 
-      //console.log("info at response: " + newRm + ", " + newFl + ", " + st);
       console.log("info at response: " + newRm + ", " + newFl);
 
-      response.say("Updating the room<break time=\"3s\" />").shouldEndSession(false).send();
-
-      dbUtil.updateCleanRoom(newRm, newFl)
+      return dbUtil.updateCleanRoom(newRm, newFl)
         .then((rows) => {
           console.log("info at db success: " + newRm + ", " + newFl);
           response.say("Succesfully updated room " + newRm + " on floor " + newFl + " to cleaned.");
