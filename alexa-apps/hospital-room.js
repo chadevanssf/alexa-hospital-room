@@ -43,7 +43,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
     },
     function(request, response) {
       console.log("info at list");
-      response.say("Getting a list of rooms<break time=\"3s\" />").shouldEndSession(false).send();
+      // make sure to return the promise so that the async call resolves
       return dbUtil.getRoomsToClean()
         .then((rows) => {
           console.log("list at db success");
@@ -75,6 +75,7 @@ hospitalRoom.getApp = function(expressApp, alexa, isDebug) {
 
       console.log("info at response: " + newRm + ", " + newFl);
 
+      // make sure to return the promise so that the async call resolves
       return dbUtil.updateCleanRoom(newRm, newFl)
         .then((rows) => {
           console.log("info at db success: " + newRm + ", " + newFl);
