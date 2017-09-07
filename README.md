@@ -2,26 +2,30 @@
 
 An Alexa Skill project using the [alexa-app](https://github.com/alexa-js/alexa-app) module with Express. Leverages Heroku for the logic instead of Amazon Lambda, and uses Heroku Connect to access data from Salesforce for the business logic.
 
+## Installation Order
+
+1. Install Salesforce backend (see [https://github.com/chadevanssf/salesforce-hospital-room](https://github.com/chadevanssf/salesforce-hospital-room))
+1. Install Heroku app (this project)
+1. Install Alexa Skill (this project)
+
 ## Deploying locally
 
 Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https://toolbelt.heroku.com/) installed. Must also have a local copy of Postgres (example for Mac: [https://postgresapp.com/](https://postgresapp.com/))
 
-* Set the local postgres to the environment variable:
+1. Set the local postgres to the environment variable:
+  ```sh
+  export DATABASE_URL=postgres:///$(whoami)
+  ```
 
-```sh
-export DATABASE_URL=postgres:///$(whoami)
-```
+1. Get the code and run it locally:
+  ```sh
+  git clone https://github.com/chadevanssf/alexa-hospital-room.git # or clone your own fork
+  cd alexa-hospital-room
+  npm install
+  npm start
+  ```
 
-* Get the code and run it locally:
-
-```sh
-git clone https://github.com/chadevanssf/alexa-hospital-room.git # or clone your own fork
-cd alexa-hospital-room
-npm install
-npm start
-```
-
-* Your app should now be running on *[http://localhost:8080](http://localhost:8080)*.
+1. Your app should now be running on *[http://localhost:8080](http://localhost:8080)*.
 
 ### Testing it
 
@@ -47,9 +51,9 @@ Your app should now be running on *https://`<heroku-app-name>`.herokuapp.com*, w
 
 ### Adding Heroku Connect
 
-You will need to have a Salesforce org with the following package installed:
+You will need to have a Salesforce org with the following project installed:
 
-**TODO**[https://login.salesforce.com](https://login.salesforce.com)
+[https://github.com/chadevanssf/salesforce-hospital-room](https://github.com/chadevanssf/salesforce-hospital-room)
 
 You can then import the connection configuration at */util/alexa-hospital-room.json*.
 
@@ -59,7 +63,7 @@ You can access a test page to verify if the basic setup is working fine: *https:
 
 Test the database by going to *https://`<app-name>`.herokuapp.com/db*
 
-### Adding Alexa Skill
+## Deploying to Alexa Skill
 
 You can access the configuration page *https://`<heroku-app-name>`.herokuapp.com/<alexa-skill-name>* to get the information that the Alexa Skill requires.
 
